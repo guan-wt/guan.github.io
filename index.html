@@ -2,8 +2,9 @@
 <html lang="zh-CN">
 <head>
     <meta charset="UTF-8">
+    <!-- 移动端自适应必备 -->
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>影视资源导航</title>
+    <title>影视搜索首页</title>
     <style>
         * {
             margin: 0;
@@ -11,89 +12,78 @@
             box-sizing: border-box;
         }
         body {
-            font-family: system-ui, sans-serif;
-            background-color: #f0f2f5;
-        }
-        /* 导航栏样式 */
-        nav {
-            background: #165DFF;
-        }
-        .nav-box {
-            max-width: 1000px;
-            margin: 0 auto;
+            min-height: 100vh;
+            /* 页面垂直水平居中 */
             display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            background-color: #f7f8fa;
+            font-family: sans-serif;
         }
-        .nav-box a {
-            color: #fff;
-            text-decoration: none;
-            padding: 18px 26px;
-            font-size: 17px;
-            display: block;
-            transition: background 0.2s;
+        .title {
+            font-size: 36px;
+            color: #222;
+            margin-bottom: 40px;
         }
-        .nav-box a:hover {
-            background: #0E4BDB;
-        }
-        /* 内容区域 */
-        .container {
-            max-width: 1000px;
-            margin: 40px auto;
+        /* 搜索框容器 */
+        .search-wrap {
+            display: flex;
+            width: 100%;
+            max-width: 600px;
             padding: 0 20px;
         }
-        .card {
-            background: white;
-            padding: 30px;
-            border-radius: 10px;
-            box-shadow: 0 2px 10px #ddd;
-        }
-        h1 {
-            color: #222;
-            margin-bottom: 15px;
-        }
-        p {
-            color: #555;
-            line-height: 1.7;
+        #search-input {
+            flex: 1;
+            height: 48px;
+            padding: 0 16px;
             font-size: 16px;
+            border: 1px solid #dcdcdc;
+            border-radius: 6px 0 0 6px;
+            outline: none;
         }
-        /* 手机适配：导航竖排 */
-        @media (max-width: 600px) {
-            .nav-box {
-                flex-direction: column;
-            }
-            .nav-box a {
-                text-align: center;
-                padding: 14px;
-            }
+        #search-input:focus {
+            border-color: #165DFF;
+        }
+        #search-btn {
+            height: 48px;
+            padding: 0 28px;
+            background-color: #165DFF;
+            color: white;
+            border: none;
+            border-radius: 0 6px 6px 0;
+            font-size: 16px;
+            cursor: pointer;
+        }
+        #search-btn:hover {
+            background-color: #0f4cdb;
+        }
+        /* 底部分类文字，仅展示，无功能 */
+        .tag-box {
+            margin-top: 30px;
+            display: flex;
+            gap: 24px;
+        }
+        .tag {
+            font-size: 18px;
+            color: #555;
         }
     </style>
 </head>
 <body>
-    <!-- 导航栏 -->
-    <nav>
-        <div class="nav-box">
-            <a href="#movie">电影</a>
-            <a href="#anime">动漫</a>
-            <a href="#tv">电视剧</a>
-        </div>
-    </nav>
+    <h1 class="title">影视资源搜索</h1>
 
-    <div class="container">
-        <div class="card">
-            <h1>影视资源导航主页</h1>
-            <p>上方导航栏可快速跳转对应分类资源，手机、电脑均可正常浏览。</p>
+    <!-- 搜索区域 -->
+    <div class="search-wrap">
+        <input type="text" id="search-input" placeholder="输入电影、动漫、电视剧名称">
+        <button id="search-btn">搜索</button>
+    </div>
 
-            <br>
-            <h2 id="movie">🎬 电影专区</h2>
-            <p>各类院线大片、经典老片、高分电影资源汇总</p>
-
-            <br>
-            <h2 id="anime">🎌 动漫专区</h2>
-            <p>新番连载、完结番剧、国漫、经典动画合集</p>
-
-            <br>
-            <h2 id="tv">📺 电视剧专区</h2>
-            <p>国产剧、韩剧、美剧、日剧、港台剧集</p>
-        </div>
+    <!-- 分类标签，仅展示，无跳转 -->
+    <div class="tag-box">
+        <span class="tag">电影</span>
+        <span class="tag">动漫</span>
+        <span class="tag">电视剧</span>
     </div>
 </body>
 </html>
