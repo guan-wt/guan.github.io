@@ -2,7 +2,6 @@
 <html lang="zh-CN">
 <head>
     <meta charset="UTF-8">
-    <!-- 移动端自适应必备 -->
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>影视搜索首页</title>
     <style>
@@ -13,20 +12,18 @@
         }
         body {
             min-height: 100vh;
-            /* 页面垂直水平居中 */
+            font-family: sans-serif;
+            background-color: #f7f8fa;
+            padding-top: 120px; /* 整体向上偏移，不再垂直居中 */
             display: flex;
             flex-direction: column;
             align-items: center;
-            justify-content: center;
-            background-color: #f7f8fa;
-            font-family: sans-serif;
         }
         .title {
             font-size: 36px;
             color: #222;
             margin-bottom: 40px;
         }
-        /* 搜索框容器 */
         .search-wrap {
             display: flex;
             width: 100%;
@@ -58,17 +55,14 @@
         #search-btn:hover {
             background-color: #0f4cdb;
         }
-        
     </style>
 </head>
 <body>
     <h1 class="title">影视资源搜索</h1>
 
-    <!-- 搜索区域 -->
     <div class="search-wrap">
         <input type="text" id="search-input" placeholder="输入电影、动漫、电视剧名称">
         <button id="search-btn">搜索</button>
     </div>
-
 </body>
 </html>
