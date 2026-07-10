@@ -56,7 +56,6 @@
         #search-btn:hover {
             background-color: #0f4cdb;
         }
-        /* 搜索结果容器，下方空白区域 */
         .result-box {
             width: 100%;
             max-width: 600px;
@@ -88,31 +87,28 @@
 </head>
 <body>
     <h1 class="title">影视资源搜索</h1>
-
     <div class="search-wrap">
         <input type="text" id="search-input" placeholder="输入电影、动漫、电视剧名称">
         <button id="search-btn">搜索</button>
     </div>
-
-    <!-- 搜索结果展示区域（下方空白） -->
     <div class="result-box" id="resultWrap"></div>
 
     <script>
-        // 模拟飞书多维表格内的影视数据（后续对接真实表格只需替换这里的数据源）
-        const filmData = [
-            { name: "流浪地球2", type: "电影" },
-            { name: "海贼王", type: "动漫" },
-            { name: "狂飙", type: "电视剧" },
-            { name: "复仇者联盟", type: "电影" },
-            { name: "鬼灭之刃", type: "动漫" },
-            { name: "漫长的季节", type: "电视剧" }
-        ];
-
+        let filmData = [];
         const input = document.getElementById('search-input');
         const btn = document.getElementById('search-btn');
         const resultWrap = document.getElementById('resultWrap');
 
-        // 搜索函数
+        // 加载仓库里自动生成的data.json
+        async function loadData() {
+            try {
+                const res = await fetch("./data.json");
+                filmData = await res.json();
+            } catch (err) {
+                resultWrap.innerHTML = `<div class="empty-tip">数据加载失败，请稍后重试</div>`;
+            }
+        }
+
         function searchFilm() {
             const keyword = input.value.trim().toLowerCase();
             resultWrap.innerHTML = "";
@@ -120,13 +116,11 @@
                 resultWrap.innerHTML = `<div class="empty-tip">请输入关键词搜索</div>`;
                 return;
             }
-            // 模糊匹配名称
             const filterList = filmData.filter(item => item.name.toLowerCase().includes(keyword));
             if (filterList.length === 0) {
                 resultWrap.innerHTML = `<div class="empty-tip">未找到相关影视</div>`;
                 return;
             }
-            // 渲染结果
             filterList.forEach(item => {
                 const div = document.createElement('div');
                 div.className = "result-item";
@@ -137,10 +131,9 @@
                 resultWrap.appendChild(div);
             });
         }
-        // 点击按钮搜索
         btn.addEventListener('click', searchFilm);
-        // 回车搜索
         input.addEventListener('keydown', e => e.key === 'Enter' && searchFilm());
+        loadData();
     </script>
 </body>
 </html>
