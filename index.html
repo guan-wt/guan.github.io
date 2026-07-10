@@ -63,19 +63,25 @@
         }
         .result-item {
             background: #fff;
-            padding: 16px 20px;
+            padding: 18px 22px;
             border-radius: 8px;
-            margin-bottom: 12px;
+            margin-bottom: 14px;
             box-shadow: 0 1px 6px #e5e7eb;
         }
         .result-name {
-            font-size: 18px;
+            font-size: 20px;
             color: #111;
-            margin-bottom: 6px;
+            font-weight: bold;
+            margin-bottom: 8px;
         }
-        .result-type {
+        .line {
             font-size: 14px;
-            color: #666;
+            color: #555;
+            margin: 4px 0;
+        }
+        .quark-link {
+            color: #165DFF;
+            word-break: break-all;
         }
         .empty-tip {
             color: #999;
@@ -88,7 +94,7 @@
 <body>
     <h1 class="title">影视资源搜索</h1>
     <div class="search-wrap">
-        <input type="text" id="search-input" placeholder="输入电影、动漫、电视剧名称">
+        <input type="text" id="search-input" placeholder="输入名称、标签搜索">
         <button id="search-btn">搜索</button>
     </div>
     <div class="result-box" id="resultWrap"></div>
@@ -99,13 +105,12 @@
         const btn = document.getElementById('search-btn');
         const resultWrap = document.getElementById('resultWrap');
 
-        // 加载仓库里自动生成的data.json
         async function loadData() {
             try {
                 const res = await fetch("./data.json");
                 filmData = await res.json();
             } catch (err) {
-                resultWrap.innerHTML = `<div class="empty-tip">数据加载失败，请稍后重试</div>`;
+                resultWrap.innerHTML = `<div class="empty-tip">数据加载失败，请等待Actions执行完成</div>`;
             }
         }
 
@@ -116,7 +121,12 @@
                 resultWrap.innerHTML = `<div class="empty-tip">请输入关键词搜索</div>`;
                 return;
             }
-            const filterList = filmData.filter(item => item.name.toLowerCase().includes(keyword));
+            // 匹配名称+标签
+            const filterList = filmData.filter(item => {
+                const name = String(item.name).toLowerCase();
+                const tag = String(item.tag).toLowerCase();
+                return name.includes(keyword) || tag.includes(keyword);
+            });
             if (filterList.length === 0) {
                 resultWrap.innerHTML = `<div class="empty-tip">未找到相关影视</div>`;
                 return;
@@ -126,7 +136,11 @@
                 div.className = "result-item";
                 div.innerHTML = `
                     <div class="result-name">${item.name}</div>
-                    <div class="result-type">分类：${item.type}</div>
+                    <div class="line">年份：${item.year} | 类型：${item.type}</div>
+                    <div class="line">清晰度：${item.clear} | 大小：${item.size}</div>
+                    <div class="line">字幕：${item.sub}</div>
+                    <div class="line">标签：${item.tag}</div>
+                    <div class="line">夸克链接：<span class="quark-link">${item.quark}</span></div>
                 `;
                 resultWrap.appendChild(div);
             });
