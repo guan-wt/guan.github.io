@@ -1,15 +1,23 @@
 import requests
 import json
+import os
 
-# ========== 替换成你自己的信息 ==========
-APP_ID = "你的AppID"
-APP_SECRET = "你的AppSecret"
-BITABLE_APP_TOKEN = "多维表格app_token"
-BITABLE_TABLE_ID = "数据表table_id"
-# 多维表格内字段名（和你表格一致）
-FIELD_NAME = "影视名称"
-FIELD_TYPE = "分类"
+# ========== 字段名保持不变，不要动 ==========
+FIELD_NAME = "名称"
+FIELD_YEAR = "年份"
+FIELD_TYPE = "类型"
+FIELD_QUARK = "夸克"
+FIELD_SIZE = "格式大小"
+FIELD_SUB = "语言字幕"
+FIELD_CLEAR = "清晰度"
+FIELD_TAG = "标签"
 # =======================================
+
+# 从GitHub Actions环境变量读取，不写死密钥
+APP_ID = os.getenv("APP_ID")
+APP_SECRET = os.getenv("APP_SECRET")
+BITABLE_APP_TOKEN = os.getenv("BITABLE_APP_TOKEN")
+BITABLE_TABLE_ID = os.getenv("BITABLE_TABLE_ID")
 
 def get_tenant_token():
     url = "https://open.feishu.cn/open-apis/auth/v3/tenant_access_token/internal"
@@ -27,21 +35,29 @@ def get_all_records():
         if page_token:
             payload["page_token"] = page_token
         res = requests.post(url, headers=headers, json=payload)
-        items = res.json()["data"]["items"]
+        resp_data = res.json()
+        items = resp_data["data"]["items"]
         for item in items:
-            fields = item["fields"]
-            name = fields.get(FIELD_NAME, "")
-            typ = fields.get(FIELD_TYPE, "")
-            if name:
-                all_data.append({"name": name, "type": typ})
-        page_token = res.json()["data"].get("page_token")
+            f = item["fields"]
+            row = {
+                "name": f.get(FIELD_NAME, ""),
+                "year": f.get(FIELD_YEAR, ""),
+                "type": f.get(FIELD_TYPE, ""),
+                "quark": f.get(FIELD_QUARK, ""),
+                "size": f.get(FIELD_SIZE, ""),
+                "sub": f.get(FIELD_SUB, ""),
+                "clear": f.get(FIELD_CLEAR, ""),
+                "tag": f.get(FIELD_TAG, "")
+            }
+            if row["name"]:
+                all_data.append(row)
+        page_token = resp_data["data"].get("page_token")
         if not page_token:
             break
     return all_data
 
 if __name__ == "__main__":
     data = get_all_records()
-    # 生成data.json放到网站根目录
     with open("data.json", "w", encoding="utf-8") as f:
         json.dump(data, f, ensure_ascii=False, indent=2)
-    print("数据已导出到 data.json")
+    print("导出完成 data.json")
